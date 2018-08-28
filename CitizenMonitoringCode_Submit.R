@@ -18,6 +18,9 @@ library(Cairo)
 first_year = 1980
 last_year = 2010
 
+# set working directory
+setwd("C:/Users/FWL/Documents/CitizenMonitoringLAGOSNE")
+
 # Reference Information
 
 ######## Citizen Monitoring Program Names ##########################
@@ -110,6 +113,7 @@ lakes_secchi$sampledate2 = NULL
 ################ Getting only summer samples ############################
 
 #create a data subset which only includes samples that were collected in summer (June 15-Sept 15)
+#coincides with lake stratification period
 
 #TP
 TPdata.june.1 <- subset(lakes_TP, samplemonth==6 & DoM>=15)
@@ -224,21 +228,28 @@ SECCHIdata.lakeDUPS <- SECCHIdata.uniquelakes[!duplicated(SECCHIdata.uniquelakes
 TP_proportion <- TP_SOI
 
 TPplot <- ggplot(TP_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle("Nutrients") +
-  labs(x="Year",y="") +scale_fill_discrete(name = "Program type") + theme(legend.position="none")
+  labs(x="",y="") +scale_fill_discrete(name = "Program type") + theme(legend.position="none") +
+  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                                                                  panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 ####################SECCHI#########################
 
 SECCHI_proportion <- SECCHI_SOI
 
 SECCHIplot <- ggplot(SECCHI_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width=2) + ggtitle("Water clarity") +
-  labs(x="",y="") + scale_fill_discrete(name = "Program type") + theme(legend.position="none") + theme(legend.position="none")
+  labs(x="",y="") + scale_fill_discrete(name = "Program type") + theme(legend.position="none") + theme(legend.position="none") +
+  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                                                                   panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 ##################Chlorophyll######################
 
 CHLA_proportion <- CHLA_SOI
 
 CHLAplot <- ggplot(CHLA_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle("Algae biomass") +
-  labs(x="",y="") + scale_fill_discrete(name = "Program type") + theme(legend.position= c(0.65, 0.15)) 
+  labs(x="",y="") + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) + theme(legend.position= c(0.74, 0.18)) +
+  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(0,1,1,1))) + 
+  theme(legend.key.size = unit(0.5,"line")) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                                                                           panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 ########## Multiplot ##########
 
@@ -281,7 +292,8 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 multiplot(SECCHIplot, TPplot, CHLAplot, cols=3)
 
 #CairoPDF(file="proportionPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12)
-multiplot(SECCHIplot, TPplot, CHLAplot, cols=3)
+#png(filename='ExportedFigures/Fig1proportionPlot.png', width=4.5, height=2, units='in', res=300)
+#multiplot(SECCHIplot, TPplot, CHLAplot, cols=3)
 #dev.off()
 
 ########################
@@ -345,9 +357,6 @@ TP_temporal_data1 <- bind_rows(CM_TP_yearsdata, nonCM_TP_yearsdata)
 
 TP_temporal_data1$yeargroup <- factor(TP_temporal_data1$yeargroup, levels = c("1-5", "6-10", "11-15", ">15"))
 
-TP_temporal_plot <- ggplot(TP_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Nutrients") +
-  labs(x="Number of years a lake was sampled",y="") + theme(legend.position="none")
-
 #uniq combos of lagoslakeid and category - to get number of lakes sampled by both program type/category
 TPdata.uniquelakes2 <- TP_temporal_data1[!duplicated(TP_temporal_data1[c("lagoslakeid","category")] ), ]
 
@@ -402,10 +411,6 @@ CHLA_temporal_data1 <- bind_rows(CM_CHLA_yearsdata, nonCM_CHLA_yearsdata)
 
 CHLA_temporal_data1$yeargroup <- factor(CHLA_temporal_data1$yeargroup, levels = c("1-5", "6-10", "11-15", ">15"))
 
-CHLA_temporal_plot <- ggplot(CHLA_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Algae biomass") +
-  labs(x="",y="") + theme(legend.position= c(0.65, 0.15))+ scale_fill_discrete(name = "Program type") 
-
-
 CHLAdata.uniquelakes2 <- CHLA_temporal_data1[!duplicated(CHLA_temporal_data1[c("lagoslakeid","category")] ), ]
 CHLAdata.lakeDUPS2 <- CHLAdata.uniquelakes2[!duplicated(CHLAdata.uniquelakes2[c("lagoslakeid")] ), ]
 #
@@ -458,21 +463,35 @@ SECCHI_temporal_data1 <- bind_rows(CM_SECCHI_yearsdata, nonCM_SECCHI_yearsdata)
 
 SECCHI_temporal_data1$yeargroup <- factor(SECCHI_temporal_data1$yeargroup, levels = c("1-5", "6-10", "11-15", ">15"))
 
-SECCHI_temporal_plot <- ggplot(SECCHI_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Water clarity") +
-  labs(x="",y="") + theme(legend.position="none")
-
 SECCHIdata.uniquelakes2 <- SECCHI_temporal_data1[!duplicated(SECCHI_temporal_data1[c("lagoslakeid","category")] ), ]
 SECCHIdata.lakeDUPS2 <- SECCHIdata.uniquelakes2[!duplicated(SECCHIdata.uniquelakes2[c("lagoslakeid")] ), ]
 
 ############### Q2 PLOT ###################
+SECCHI_temporal_plot <- ggplot(SECCHI_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Water clarity") +
+  labs(x="",y="") + theme(legend.position="none") + 
+  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                                                                    panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-#CairoPDF(file="TemporalPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12)
+TP_temporal_plot <- ggplot(TP_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Nutrients") +
+  labs(x="",y="") + theme(legend.position="none") + 
+  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                                                                    panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+CHLA_temporal_plot <- ggplot(CHLA_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Algae biomass") +
+  labs(x="",y="") + theme(legend.position= c(0.74, 0.18)) + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) +
+  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(0,1,1,1))) + 
+  theme(legend.key.size = unit(0.5,"line")) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                                                                           panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
 multiplot(SECCHI_temporal_plot, TP_temporal_plot, CHLA_temporal_plot, cols=3)
+#CairoPDF(file="TemporalPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12)
+#png(filename='ExportedFigures/Fig2proportionPlot2.png', width=4.5, height=2, units='in', res=300)
+#multiplot(SECCHI_temporal_plot, TP_temporal_plot, CHLA_temporal_plot, cols=3)
 #dev.off()
 
-write.csv(SECCHIdata.uniquelakes2, "Secchi_TemporalData_20JUN2018.csv")
-write.csv(CHLAdata.uniquelakes2, "CHLA_TemporalData_20JUN2018.csv")
-write.csv(TPdata.uniquelakes2, "TP_TemporalData_20JUN2018.csv")
+#write.csv(SECCHIdata.uniquelakes2, "Secchi_TemporalData_20JUN2018.csv")
+#write.csv(CHLAdata.uniquelakes2, "CHLA_TemporalData_20JUN2018.csv")
+#write.csv(TPdata.uniquelakes2, "TP_TemporalData_20JUN2018.csv")
 
 ###############
 ### Q3 BIAS ###
@@ -576,6 +595,7 @@ bind_sampled_SOI_lakes <- rbind(sampled_lakes_bias_df, SOI_lakes_bias_df)
 ###################### Box Plots #########################
 
 color_vector <- c("#00BA38", "#F8766D", "#00BFC4")
+box_labels <- c('All lakes','Citizen','Non')
 
 # LAKE SIZE (log transformed)
 allstates_lake_area <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = log(lakearea_ha))) + 
@@ -585,7 +605,11 @@ allstates_lake_area <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = log(
   scale_y_continuous(limits = c(0, 12)) +
   labs(fill = "Sampling Group") + 
   theme(legend.position="none") + 
-  scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))
+  theme(text = element_text(size=8)) +
+  scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))+
+  theme(plot.margin = unit(c(0.1,0.1,-0.2,0.1), "cm")) +
+  scale_x_discrete(labels=box_labels) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 # RESIDENTIAL DEVELOPMENT
 allstates_resident_dvlp <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = resident_dvlp)) + 
@@ -594,7 +618,11 @@ allstates_resident_dvlp <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = 
   labs(x = "", y = "Residential development (%)") + 
   scale_y_continuous(limits = c(0, 50)) + 
   theme(legend.position="none")+ 
-  scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))
+  theme(text = element_text(size=8)) +
+  scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))+
+  theme(plot.margin = unit(c(0.1,0.1,-0.2,0.1), "cm")) +
+  scale_x_discrete(labels=box_labels)+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 # AGRICULTURE
 allstates_ag <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = total_ag_2006_pct)) + 
@@ -604,7 +632,11 @@ allstates_ag <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = total_ag_20
   scale_y_continuous(limits = c(0, 100)) +
   labs(fill = "Sampling Group") + 
   theme(legend.position="none") + 
-  scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))
+  theme(text = element_text(size=8)) +
+  scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))+
+  theme(plot.margin = unit(c(0.1,0.1,-0.2,0.1), "cm")) +
+  scale_x_discrete(labels=box_labels)+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 # PERCENT FOREST
 allstates_percent_forest <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = total_forest_2006_pct)) + 
@@ -614,7 +646,11 @@ allstates_percent_forest <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y =
   labs(fill = "Sampling Group") +
   scale_y_continuous(limits = c(0, 100))+ 
   theme(legend.position="none")+ 
-  scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))
+  theme(text = element_text(size=8)) +
+  scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))+
+  theme(plot.margin = unit(c(0.1,0.1,-0.2,0.1), "cm")) +
+  scale_x_discrete(labels=box_labels)+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 # PERCENT WETLAND
 allstates_percent_wetland <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = all_wetland_dissolved_pct)) + 
@@ -624,7 +660,11 @@ allstates_percent_wetland <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y 
   labs(fill = "Sampling Group") +
   scale_y_continuous(limits = c(0, 25))+ 
   theme(legend.position="none")+ 
-  scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))
+  theme(text = element_text(size=8)) +
+  scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))+
+  theme(plot.margin = unit(c(0.1,0.1,-0.2,0.1), "cm")) +
+  scale_x_discrete(labels=box_labels)+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 # SECCHI BIAS
 allstates_secchi_bias_plot <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = secchi.avg)) + 
@@ -634,7 +674,11 @@ allstates_secchi_bias_plot <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y
   labs(fill = "Sampling Group") + 
   scale_y_continuous(limits = c(0, 7))+
   theme(legend.position="none")+ 
-  scale_fill_manual(values=c(color_vector[2], color_vector[3]))
+  theme(text = element_text(size=8)) +
+  scale_fill_manual(values=c(color_vector[2], color_vector[3]))+
+  theme(plot.margin = unit(c(0.1,0.1,-0.2,0.1), "cm")) +
+  scale_x_discrete(labels=box_labels)+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 #CairoPDF(file="BoxPlot.pdf", width=11, height=8.5, family="Helvetica", pointsize=12)
 multiplot(allstates_lake_area,
@@ -643,6 +687,8 @@ multiplot(allstates_lake_area,
           allstates_percent_forest,
           allstates_percent_wetland,
           allstates_secchi_bias_plot, cols=2)
+#png(filename='ExportedFigures/Fig4BoxPlots.png', width=4.5, height=4.5, units='in', res=300)
+#multiplot(allstates_lake_area,allstates_resident_dvlp,allstates_ag,allstates_percent_forest,allstates_percent_wetland,allstates_secchi_bias_plot, cols=2)
 #dev.off()
 
 ##########
