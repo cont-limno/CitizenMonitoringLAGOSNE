@@ -247,7 +247,7 @@ CHLA_proportion <- CHLA_SOI
 
 CHLAplot <- ggplot(CHLA_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle("Algae biomass") +
   labs(x="",y="") + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) + theme(legend.position= c(0.74, 0.18)) +
-  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(0,1,1,1))) + 
+  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(0,1,1,1))) + theme(legend.text=element_text(size=7)) +
   theme(legend.key.size = unit(0.5,"line")) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                                                                                            panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
@@ -291,7 +291,7 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 
 multiplot(SECCHIplot, TPplot, CHLAplot, cols=3)
 
-#CairoPDF(file="proportionPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12)
+##CairoPDF(file="proportionPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12) #old
 #png(filename='ExportedFigures/Fig1proportionPlot.png', width=4.5, height=2, units='in', res=300)
 #multiplot(SECCHIplot, TPplot, CHLAplot, cols=3)
 #dev.off()
@@ -479,13 +479,13 @@ TP_temporal_plot <- ggplot(TP_temporal_data1, aes(x = yeargroup, fill = category
 
 CHLA_temporal_plot <- ggplot(CHLA_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Algae biomass") +
   labs(x="",y="") + theme(legend.position= c(0.74, 0.18)) + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) +
-  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(0,1,1,1))) + 
+  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(0,1,1,1))) + theme(legend.text=element_text(size=7)) +
   theme(legend.key.size = unit(0.5,"line")) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                                                                                            panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 multiplot(SECCHI_temporal_plot, TP_temporal_plot, CHLA_temporal_plot, cols=3)
-#CairoPDF(file="TemporalPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12)
-#png(filename='ExportedFigures/Fig2proportionPlot2.png', width=4.5, height=2, units='in', res=300)
+##CairoPDF(file="TemporalPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12)#old
+#png(filename='ExportedFigures/Fig2proportionPlot.png', width=4.5, height=2, units='in', res=300)
 #multiplot(SECCHI_temporal_plot, TP_temporal_plot, CHLA_temporal_plot, cols=3)
 #dev.off()
 
