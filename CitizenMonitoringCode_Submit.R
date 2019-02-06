@@ -5,7 +5,7 @@
 ######################################
 
 #loading LAGOS and other libraries
-library(LAGOS)
+library(LAGOSNE)
 library(tidyverse)
 library(dplyr)
 library(reshape2)
@@ -54,7 +54,7 @@ setwd("C:/Users/FWL/Documents/CitizenMonitoringLAGOSNE")
 ###################################################
 
 #load LAGOS-NE dataset
-dt <- lagos_load(version = "1.087.1", format = "rds")
+dt <- lagosne_load(version = "1.087.1", format = "rds")
 
 #Program type not reflected into epi_nutri/secchi so can't go there first, must combine with source program. 
 Programs <- select(dt$lagos_source_program, programtype, programname)
@@ -75,13 +75,24 @@ secchi_dup1 <- select(secchi_dup, lagoslakeid, sampledate, secchi, programname, 
 secchi_NODUP <- secchi_dup1[!duplicated(secchi_dup1[1:3]),]
 
 # NUTRIENTS
-limno_nutri <- select(dt$epi_nutr, lagoslakeid, sampledate, tp, chla, programname, programtype, samplemonth, sampleyear)
+limno_nutri <- select(dt$epi_nutr, lagoslakeid, sampledate, tp, chla, no2no3, tkn, tn,
+                      programname, programtype, samplemonth, sampleyear)
 # TP
 TP_dup <- select(limno_nutri, lagoslakeid, sampledate, tp, programname, sampleyear, samplemonth)
 TP_NODUP <- TP_dup[!duplicated(TP_dup[1:3]),]
+
 # CHLA
 CHLA_dup <- select(limno_nutri, lagoslakeid, sampledate, chla, programname, sampleyear, samplemonth)
 CHLA_NODUP <- CHLA_dup[!duplicated(CHLA_dup[1:3]),]
+
+# TN
+# first calculate TN for lakes with TKN and NO2NO3 data
+limno_nutri$tn_calculated <- limno_nutri$tkn + limno_nutri$no2no3
+limno_nutri$tn_combined <- limno_nutri$tn
+limno_nutri$tn_combined[which(is.na(limno_nutri$tn_combined) == T)] <- limno_nutri$tn_calculated[which(is.na(limno_nutri$tn_combined) == T)]
+
+TN_dup <- select(limno_nutri, lagoslakeid, sampledate, tn_combined, programname, sampleyear, samplemonth)
+TN_NODUP <- TN_dup[!duplicated(TN_dup[1:3]),]
 
 #################################################################################################################
 
@@ -89,11 +100,13 @@ CHLA_NODUP <- CHLA_dup[!duplicated(CHLA_dup[1:3]),]
 TP_update <- left_join(TP_NODUP, Programs, by = 'programname')
 CHLA_update <- left_join(CHLA_NODUP, Programs, by = 'programname')
 secchi_update <- left_join(secchi_NODUP, Programs, by = 'programname')
+TN_update <- left_join(TN_NODUP, Programs, by = 'programname')
 
 #remove lakeids where there is nothing sampled for tp, chla or secchi, keep when sampled even once
 lakes_TP <- TP_update[!(is.na(TP_update$tp)),]
 lakes_CHLA <- CHLA_update[!(is.na(CHLA_update$chla)),]
 lakes_secchi <- secchi_update[!(is.na(secchi_update$secchi)),]
+lakes_TN <- TN_update[!(is.na(TN_update$tn_combined)),]
 
 #select only summer sampling period
 ##separate sample date into Y, M, D so we have a date of month for summer cutoffs
@@ -101,14 +114,17 @@ lakes_secchi <- secchi_update[!(is.na(secchi_update$secchi)),]
 lakes_TP$sampledate2 <- as.Date(lakes_TP$sampledate, format="%m/%d/%Y", "%d")
 lakes_CHLA$sampledate2 <- as.Date(lakes_CHLA$sampledate, format="%m/%d/%Y", "%d")
 lakes_secchi$sampledate2 <- as.Date(lakes_secchi$sampledate, format="%m/%d/%Y", "%d")
+lakes_TN$sampledate2 <- as.Date(lakes_TN$sampledate, format="%m/%d/%Y", "%d")
 #pulling out date
 lakes_TP$DoM <- format(as.Date(lakes_TP$sampledate2, format="%Y-%m-%d"), "%d")
 lakes_CHLA$DoM <- format(as.Date(lakes_CHLA$sampledate2, format="%Y-%m-%d"), "%d")
 lakes_secchi$DoM <- format(as.Date(lakes_secchi$sampledate2, format="%Y-%m-%d"), "%d")
+lakes_TN$DoM <- format(as.Date(lakes_TN$sampledate2, format="%Y-%m-%d"), "%d")
 
 lakes_TP$sampledate2 = NULL
 lakes_CHLA$sampledate2 = NULL
 lakes_secchi$sampledate2 = NULL
+lakes_TN$sampledate2 = NULL
 
 ################ Getting only summer samples ############################
 
@@ -160,20 +176,39 @@ secchidata.aug <-  rbind(secchidata.aug.1, secchidata.aug.2)
 
 secchi.data.summer <- rbind(secchidata.aug, secchidata.june, secchidata.july)
 
+# TN
+TNdata.june.1 <- subset(lakes_TN, samplemonth==6 & DoM>=15)
+TNdata.june.2 <- subset(lakes_TN, samplemonth==7 & DoM<15)
+TNdata.june <- rbind(TNdata.june.1, TNdata.june.2)
+
+TNdata.july.1 <-  subset(lakes_TN, samplemonth==7 & DoM>=15)
+TNdata.july.2 <- subset(lakes_TN, samplemonth==8 & DoM<15)
+TNdata.july <- rbind(TNdata.july.1, TNdata.july.2)
+
+TNdata.aug.1 <-  subset(lakes_TN, samplemonth==8 & DoM>=15)
+TNdata.aug.2 <-  subset(lakes_TN, samplemonth==9 & DoM<15)
+TNdata.aug <-  rbind(TNdata.aug.1, TNdata.aug.2)
+
+TN.data.summer <- rbind(TNdata.aug, TNdata.june, TNdata.july)
+
+
 #only want years between 1980 to 2010
 TP.data.years <- subset(tp.data.summer, sampleyear>=first_year & sampleyear<=last_year)
 CHLA.data.years <- subset(CHLA.data.summer, sampleyear>=first_year & sampleyear<=last_year)
 secchi.data.years <- subset(secchi.data.summer, sampleyear>=first_year & sampleyear<=last_year)
+TN.data.years <- subset(TN.data.summer, sampleyear>=first_year & sampleyear<=last_year)
 
 #create a column "category" where each lake id is aligned with either a Citizen monitoring program or a Non-Citizen monitoring program
 TP.data.years$category <- ifelse(TP.data.years$programtype == "Citizen Science", "Citizen monitoring", "Non-citizen monitoring")
 CHLA.data.years$category <- ifelse(CHLA.data.years$programtype == "Citizen Science", "Citizen monitoring", "Non-citizen monitoring")
 secchi.data.years$category <- ifelse(secchi.data.years$programtype == "Citizen Science", "Citizen monitoring", "Non-citizen monitoring")
+TN.data.years$category <- ifelse(TN.data.years$programtype == "Citizen Science", "Citizen monitoring", "Non-citizen monitoring")
 
 #try to fix the MO_UM_SLAP_1978_2013 issue (was categorized incorrectly)
 TP.data.years <- transform(TP.data.years, category = ifelse(programname == "MO_UM_SLAP_1978_2013", "Non-citizen monitoring", category))
 CHLA.data.years <- transform(CHLA.data.years, category = ifelse(programname == "MO_UM_SLAP_1978_2013", "Non-citizen monitoring", category))
 secchi.data.years <- transform(secchi.data.years, category = ifelse(programname == "MO_UM_SLAP_1978_2013", "Non-citizen monitoring", category))
+TN.data.years <- transform(TN.data.years, category = ifelse(programname == "MO_UM_SLAP_1978_2013", "Non-citizen monitoring", category))
 
 #assigning state name
 CHLA.data.years$state <- ifelse(grepl('^MI_', CHLA.data.years$programname), "Michigan",
@@ -200,15 +235,47 @@ secchi.data.years$state <- ifelse(grepl('^MI_', secchi.data.years$programname), 
                                                               ifelse(grepl('^NH_', secchi.data.years$programname), "New Hampshire",
                                                                      ifelse(grepl('^MO_', secchi.data.years$programname), "Missouri",NA)))))))
 
+TN.data.years$state <- ifelse(grepl('^MI_', TN.data.years$programname), "Michigan",
+                              ifelse(grepl('^IN_', TN.data.years$programname), "Indiana",
+                                     ifelse(grepl('^RI_', TN.data.years$programname), "Rhode Island",
+                                            ifelse(grepl('^MN_', TN.data.years$programname), "Minnesota",
+                                                   ifelse(grepl('^NY_', TN.data.years$programname), "New York",
+                                                          ifelse(grepl('^NH_', TN.data.years$programname), "New Hampshire",
+                                                                 ifelse(grepl('^MO_', TN.data.years$programname), "Missouri",NA)))))))
+
 #remove data from unwanted states: states of interest = SOI
 TP_SOI <- TP.data.years[!(is.na(TP.data.years$state)),]
 CHLA_SOI <- CHLA.data.years[!(is.na(CHLA.data.years$state)),]
 SECCHI_SOI <- secchi.data.years[!(is.na(secchi.data.years$state)),]
+TN_SOI <- TN.data.years[!(is.na(TN.data.years$state)),]
+
+# proportion of samples by CS and non
+TN_prop_allsamples <- as.data.frame(TN_SOI %>% 
+  group_by(category) %>%
+  tally())
+TN_prop_allsamples$Prop <- TN_prop_allsamples$n/nrow(TN_SOI)
+
+TP_prop_allsamples <- as.data.frame(TP_SOI %>% 
+                                      group_by(category) %>%
+                                      tally())
+TP_prop_allsamples$Prop <- TP_prop_allsamples$n/nrow(TP_SOI)
+
+chla_prop_allsamples <- as.data.frame(CHLA_SOI %>% 
+                                      group_by(category) %>%
+                                      tally())
+chla_prop_allsamples$Prop <- chla_prop_allsamples$n/nrow(CHLA_SOI)
+
+secchi_prop_allsamples <- as.data.frame(SECCHI_SOI %>% 
+                                      group_by(category) %>%
+                                      tally())
+secchi_prop_allsamples$Prop <- secchi_prop_allsamples$n/nrow(SECCHI_SOI)
+
 
 #uniq combos of lagoslakeid and category - to get number of lakes sampled by both program type/category
 TPdata.uniquelakes <- TP_SOI[!duplicated(TP_SOI[c("lagoslakeid","category")] ), ]
 CHLAdata.uniquelakes <- CHLA_SOI[!duplicated(CHLA_SOI[c("lagoslakeid","category")] ), ]
 SECCHIdata.uniquelakes <- SECCHI_SOI[!duplicated(SECCHI_SOI[c("lagoslakeid","category")] ), ]
+TNdata.uniquelakes <- TN_SOI[!duplicated(TN_SOI[c("lagoslakeid","category")] ), ]
 
 #count # of duplicate lagoslakeids
 TPdata.lakeDUPS <- TPdata.uniquelakes[!duplicated(TPdata.uniquelakes[c("lagoslakeid")] ), ]
@@ -217,7 +284,8 @@ CHLAdata.lakeDUPS <- CHLAdata.uniquelakes[!duplicated(CHLAdata.uniquelakes[c("la
 # 4764-4537=227
 SECCHIdata.lakeDUPS <- SECCHIdata.uniquelakes[!duplicated(SECCHIdata.uniquelakes[c("lagoslakeid")] ), ]
 # 8416-6391=2025
-
+TNdata.lakeDUPS <- TNdata.uniquelakes[!duplicated(TNdata.uniquelakes[c("lagoslakeid")] ), ]
+# 3430-3368= 62
 
 ###########################################
 ######### Q1 Proportion Plots #############
@@ -227,7 +295,7 @@ SECCHIdata.lakeDUPS <- SECCHIdata.uniquelakes[!duplicated(SECCHIdata.uniquelakes
 
 TP_proportion <- TP_SOI
 
-TPplot <- ggplot(TP_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle("Nutrients") +
+TPplot <- ggplot(TP_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle("Phosphorus") +
   labs(x="",y="") +scale_fill_discrete(name = "Program type") + theme(legend.position="none") +
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                                                                                   panel.background = element_blank(), axis.line = element_line(colour = "black"))
@@ -246,10 +314,21 @@ SECCHIplot <- ggplot(SECCHI_proportion, aes(x = sampleyear, fill = category)) + 
 CHLA_proportion <- CHLA_SOI
 
 CHLAplot <- ggplot(CHLA_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle("Algae biomass") +
-  labs(x="",y="") + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) + theme(legend.position= c(0.74, 0.18)) +
-  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(0,1,1,1))) + theme(legend.text=element_text(size=7)) +
+  labs(x="",y="") + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) + theme(legend.position= c(0.72, 0.18)) +
+  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(1,1,1,1))) + theme(legend.text=element_text(size=7)) +
   theme(legend.key.size = unit(0.5,"line")) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                                                                                            panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+
+######################## TN ########################
+TN_proportion <- TN_SOI
+
+TNplot <- ggplot(TN_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle("Nitrogen") +
+  labs(x="",y="") +scale_fill_discrete(name = "Program type") + theme(legend.position="none") +
+  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                                                                    panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+
 
 ########## Multiplot ##########
 
@@ -289,11 +368,11 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   }
 }
 
-multiplot(SECCHIplot, TPplot, CHLAplot, cols=3)
+multiplot(SECCHIplot, TPplot, TNplot, CHLAplot, cols=4)
 
 ##CairoPDF(file="proportionPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12) #old
-#png(filename='ExportedFigures/Fig1proportionPlot.png', width=4.5, height=2, units='in', res=300)
-#multiplot(SECCHIplot, TPplot, CHLAplot, cols=3)
+#png(filename='ExportedFigures/Fig1proportionPlot_wTN.png', width=5, height=2, units='in', res=300)
+#multiplot(SECCHIplot, TPplot, TNplot, CHLAplot, cols=4)
 #dev.off()
 
 ########################
@@ -309,6 +388,9 @@ nonCM_CHLA_data <- subset(CHLA_SOI, category == "Non-citizen monitoring")
 
 CM_secchi_data <- subset(SECCHI_SOI, category == "Citizen monitoring")
 nonCM_secchi_data <- subset(SECCHI_SOI, category == "Non-citizen monitoring")
+
+CM_TN_data <- subset(TN_SOI, category == "Citizen monitoring")
+nonCM_TN_data <- subset(TN_SOI, category == "Non-citizen monitoring")
 
 #################### 
 # Total Phosphorus #
@@ -363,6 +445,61 @@ TPdata.uniquelakes2 <- TP_temporal_data1[!duplicated(TP_temporal_data1[c("lagosl
 #count # of duplicate lagoslakeids
 TPdata.lakeDUPS2 <- TPdata.uniquelakes2[!duplicated(TPdata.uniquelakes2[c("lagoslakeid")] ), ]
 #
+
+#################### 
+# Total Nitrogen #
+####################
+
+#CM - removing duplicates of sample year + lagoslakeid combo
+CM_TN_temporal_plot <- CM_TN_data[!duplicated(CM_TN_data[c("lagoslakeid","sampleyear")] ), ] 
+#selecting out the lagoslakeids so we can count each time they appear
+CM_TN_temporal_count <- select(CM_TN_temporal_plot, lagoslakeid)
+#count (CM_TN_temporal_count=lagoslakeid, Freq=number of years sampled)
+CM_TN_temporal_count <- as.data.frame(table(CM_TN_temporal_count))
+CM_TN_temporal_count$category <- "citizen monitoring"
+#rename column headers
+names(CM_TN_temporal_count) <- c("lagoslakeid", "count", "category")
+
+CM_TN_temporal_count$yeargroup <- ifelse(CM_TN_temporal_count$count <= 5, "1-5",
+                                         ifelse(CM_TN_temporal_count$count > 5 & CM_TN_temporal_count$count <= 10, "6-10",
+                                                ifelse(CM_TN_temporal_count$count > 10 & CM_TN_temporal_count$count <= 15, "11-15",
+                                                       ifelse(CM_TN_temporal_count$count >= 16, ">15", NA))))
+
+CM_TN_data$lagoslakeid = as.factor(CM_TN_data$lagoslakeid)
+CM_TN_temporal_count$category = NULL
+CM_TN_yearsdata <- left_join(CM_TN_data, CM_TN_temporal_count, by = "lagoslakeid")
+
+#NON-CM - removing duplicates of sample year and lagoslakeids
+nonCM_TN_temporal_plot <- nonCM_TN_data[!duplicated(nonCM_TN_data[c("lagoslakeid","sampleyear")] ), ] 
+#selecting out the lagoslakeids so we can count each time they appear
+nonCM_TN_temporal_count <- select(nonCM_TN_temporal_plot, lagoslakeid)
+#count (nonCM_TN_temporal_count=lagoslakeid, Freq=number of years sampled)
+nonCM_TN_temporal_count <- as.data.frame(table(nonCM_TN_temporal_count))
+nonCM_TN_temporal_count$category <- "Non-citizen monitoring"
+#rename column headers
+names(nonCM_TN_temporal_count) <- c("lagoslakeid", "count", "category")
+#change the data type of lagoslakeid so we can combine with program info
+
+nonCM_TN_temporal_count$yeargroup <- ifelse(nonCM_TN_temporal_count$count <= 5, "1-5",
+                                            ifelse(nonCM_TN_temporal_count$count > 5 & nonCM_TN_temporal_count$count <= 10, "6-10",
+                                                   ifelse(nonCM_TN_temporal_count$count > 10 & nonCM_TN_temporal_count$count <= 15, "11-15",
+                                                          ifelse(nonCM_TN_temporal_count$count >= 16, ">15", NA))))
+
+nonCM_TN_data$lagoslakeid = as.factor(nonCM_TN_data$lagoslakeid)
+nonCM_TN_temporal_count$category = NULL
+nonCM_TN_yearsdata <- left_join(nonCM_TN_data, nonCM_TN_temporal_count, by = "lagoslakeid")
+
+TN_temporal_data1 <- bind_rows(CM_TN_yearsdata, nonCM_TN_yearsdata)
+
+TN_temporal_data1$yeargroup <- factor(TN_temporal_data1$yeargroup, levels = c("1-5", "6-10", "11-15", ">15"))
+
+#uniq combos of lagoslakeid and category - to get number of lakes sampled by both program type/category
+TNdata.uniquelakes2 <- TN_temporal_data1[!duplicated(TN_temporal_data1[c("lagoslakeid","category")] ), ]
+
+#count # of duplicate lagoslakeids
+TNdata.lakeDUPS2 <- TNdata.uniquelakes2[!duplicated(TNdata.uniquelakes2[c("lagoslakeid")] ), ]
+#
+#write.csv(TNdata.lakeDUPS2, "TN_years_data.csv")
 
 #################
 # Chlorophyll A #
@@ -472,22 +609,28 @@ SECCHI_temporal_plot <- ggplot(SECCHI_temporal_data1, aes(x = yeargroup, fill = 
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                                                                                     panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-TP_temporal_plot <- ggplot(TP_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Nutrients") +
+TP_temporal_plot <- ggplot(TP_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Phosphorus") +
   labs(x="",y="") + theme(legend.position="none") + 
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                                                                                     panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
 CHLA_temporal_plot <- ggplot(CHLA_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Algae biomass") +
-  labs(x="",y="") + theme(legend.position= c(0.74, 0.18)) + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) +
-  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(0,1,1,1))) + theme(legend.text=element_text(size=7)) +
+  labs(x="",y="") + theme(legend.position= c(0.72, 0.18)) + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) +
+  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(1,1,1,1))) + theme(legend.text=element_text(size=7)) +
   theme(legend.key.size = unit(0.5,"line")) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                                                                                            panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-multiplot(SECCHI_temporal_plot, TP_temporal_plot, CHLA_temporal_plot, cols=3)
+TN_temporal_plot <- ggplot(TN_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Nitrogen") +
+  labs(x="",y="") + theme(legend.position="none") + 
+  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                                                                                    panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+
+multiplot(SECCHI_temporal_plot, TP_temporal_plot, TN_temporal_plot, CHLA_temporal_plot, cols=4)
 ##CairoPDF(file="TemporalPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12)#old
-#png(filename='ExportedFigures/Fig2proportionPlot.png', width=4.5, height=2, units='in', res=300)
-#multiplot(SECCHI_temporal_plot, TP_temporal_plot, CHLA_temporal_plot, cols=3)
-#dev.off()
+png(filename='ExportedFigures/Fig2proportionPlot_wTN.png', width=5, height=2, units='in', res=300)
+multiplot(SECCHI_temporal_plot, TP_temporal_plot, TN_temporal_plot, CHLA_temporal_plot, cols=4)
+dev.off()
 
 #write.csv(SECCHIdata.uniquelakes2, "Secchi_TemporalData_20JUN2018.csv")
 #write.csv(CHLAdata.uniquelakes2, "CHLA_TemporalData_20JUN2018.csv")
@@ -524,8 +667,9 @@ locus_df <- data.frame(lagoslakeid = dt$locus$lagoslakeid, state_zoneid = dt$loc
 TP_lakeids <- select(TP_SOI, lagoslakeid, programname, category, state)
 CHLA_lakeids <- select(CHLA_SOI, lagoslakeid, programname, category, state)
 SECCHI_lakeids <- select(SECCHI_SOI, lagoslakeid, programname, category, state)
+TN_lakeids <- select(TN_SOI, lagoslakeid, programname, category, state)
 
-lakeids <- bind_rows(TP_lakeids, CHLA_lakeids, SECCHI_lakeids)
+lakeids <- bind_rows(TP_lakeids, TN_lakeids, CHLA_lakeids, SECCHI_lakeids)
 unique_lakeids <- lakeids[!duplicated(lakeids[c("lagoslakeid", "category")] ), ]
 
 # create data frame of all lakes for gradients defined above
