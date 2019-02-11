@@ -636,6 +636,24 @@ dev.off()
 #write.csv(CHLAdata.uniquelakes2, "CHLA_TemporalData_20JUN2018.csv")
 #write.csv(TPdata.uniquelakes2, "TP_TemporalData_20JUN2018.csv")
 
+## Count number of lakes in each year group
+SECCHI_temporal_data1 %>% 
+  group_by(yeargroup, category) %>%
+  tally()
+
+CHLA_temporal_data1 %>% 
+  group_by(yeargroup, category) %>%
+  tally()
+
+TP_temporal_data1 %>% 
+  group_by(yeargroup, category) %>%
+  tally()
+
+TN_temporal_data1 %>% 
+  group_by(yeargroup, category) %>%
+  tally()
+
+
 ###############
 ### Q3 BIAS ###
 ###############
