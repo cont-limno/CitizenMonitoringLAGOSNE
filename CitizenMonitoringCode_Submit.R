@@ -291,44 +291,66 @@ TNdata.lakeDUPS <- TNdata.uniquelakes[!duplicated(TNdata.uniquelakes[c("lagoslak
 ######### Q1 Proportion Plots #############
 ###########################################
 
-############### Total Phosphorous ##################
-
-TP_proportion <- TP_SOI
-
-TPplot <- ggplot(TP_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle("Phosphorus") +
-  labs(x="",y="") +scale_fill_discrete(name = "Program type") + theme(legend.position="none") +
-  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                                                                                  panel.background = element_blank(), axis.line = element_line(colour = "black"))
-
 ####################SECCHI#########################
 
 SECCHI_proportion <- SECCHI_SOI
 
-SECCHIplot <- ggplot(SECCHI_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width=2) + ggtitle("Water clarity") +
-  labs(x="",y="") + scale_fill_discrete(name = "Program type") + theme(legend.position="none") + theme(legend.position="none") +
-  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                                                                                   panel.background = element_blank(), axis.line = element_line(colour = "black"))
+SECCHIplot <- ggplot(SECCHI_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width=2) + ggtitle(paste0("A) Water clarity",' (n=', nrow(SECCHI_SOI), ')')) +
+  labs(x="Year",y="Proportion of data") + scale_fill_discrete(name = "Program type") + theme(legend.position="none") +
+  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  panel.background = element_blank(), axis.line = element_line(colour = "black"),
+  plot.title=element_text(size=6),
+  axis.text.x=element_text(size=6),
+  axis.text.y=element_text(size=6),
+  axis.title.x=element_text(size=6),
+  axis.title.y=element_text(size=6))
 
-##################Chlorophyll######################
+############### Total Phosphorous ##################
 
-CHLA_proportion <- CHLA_SOI
+TP_proportion <- TP_SOI
 
-CHLAplot <- ggplot(CHLA_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle("Algae biomass") +
-  labs(x="",y="") + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) + theme(legend.position= c(0.72, 0.18)) +
-  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(1,1,1,1))) + theme(legend.text=element_text(size=7)) +
-  theme(legend.key.size = unit(0.5,"line")) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                                                                                           panel.background = element_blank(), axis.line = element_line(colour = "black"))
-
-
+TPplot <- ggplot(TP_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle(paste0("B) Phosphorus", ' (n=', nrow(TP_SOI), ')')) +
+  labs(x="Year",y="Proportion of data") +scale_fill_discrete(name = "Program type") + theme(legend.position="none") +
+  theme(text = element_text(size=8)) + 
+  theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        plot.title=element_text(size=6),
+        axis.text.x=element_text(size=6),
+        axis.text.y=element_text(size=6),
+        axis.title.x=element_text(size=6),
+        axis.title.y=element_text(size=6))
 ######################## TN ########################
 TN_proportion <- TN_SOI
 
-TNplot <- ggplot(TN_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle("Nitrogen") +
-  labs(x="",y="") +scale_fill_discrete(name = "Program type") + theme(legend.position="none") +
-  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                                                                                    panel.background = element_blank(), axis.line = element_line(colour = "black"))
+TNplot <- ggplot(TN_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle(paste0("C) Nitrogen", ' (n=', nrow(TN_SOI), ')')) +
+  labs(x="Year",y="Proportion of data") +scale_fill_discrete(name = "Program type") + theme(legend.position="none") +
+  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  panel.background = element_blank(), axis.line = element_line(colour = "black"),
+  plot.title=element_text(size=6),
+  axis.text.x=element_text(size=6),
+  axis.text.y=element_text(size=6),
+  axis.title.x=element_text(size=6),
+  axis.title.y=element_text(size=6))
 
 
+##################Chlorophyll######################
+CHLA_proportion <- CHLA_SOI
+
+CHLAplot <- ggplot(CHLA_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle(paste0("D) Algal biomass", ' (n=', nrow(CHLA_SOI), ')')) +
+  labs(x="Year",y="Proportion of data") + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) + theme(legend.position= c(0.72, 0.18)) +
+  theme(text = element_text(size=6)) + theme(legend.title=element_blank(), 
+  legend.margin=margin(c(1,1,1,1))) + theme(legend.text=element_text(size=7)) +
+  theme(legend.key.size = unit(0.5,"line")) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  panel.background = element_blank(), axis.line = element_line(colour = "black"),
+  plot.title=element_text(size=6),
+  axis.text.x=element_text(size=6),
+  axis.text.y=element_text(size=6),
+  axis.title.x=element_text(size=6),
+  axis.title.y=element_text(size=6))
 
 ########## Multiplot ##########
 
@@ -371,8 +393,8 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 multiplot(SECCHIplot, TPplot, TNplot, CHLAplot, cols=4)
 
 ##CairoPDF(file="proportionPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12) #old
-#png(filename='ExportedFigures/Fig1proportionPlot_wTN.png', width=5, height=2, units='in', res=300)
-#multiplot(SECCHIplot, TPplot, TNplot, CHLAplot, cols=4)
+#png(filename='ExportedFigures/Fig1proportionPlot_wTN.png', width=6, height=2.5, units='in', res=300)
+#  multiplot(SECCHIplot, TPplot, TNplot, CHLAplot, cols=4)
 #dev.off()
 
 ########################
@@ -604,33 +626,57 @@ SECCHIdata.uniquelakes2 <- SECCHI_temporal_data1[!duplicated(SECCHI_temporal_dat
 SECCHIdata.lakeDUPS2 <- SECCHIdata.uniquelakes2[!duplicated(SECCHIdata.uniquelakes2[c("lagoslakeid")] ), ]
 
 ############### Q2 PLOT ###################
-SECCHI_temporal_plot <- ggplot(SECCHI_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Water clarity") +
-  labs(x="",y="") + theme(legend.position="none") + 
-  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                                                                                    panel.background = element_blank(), axis.line = element_line(colour = "black"))
+SECCHI_temporal_plot <- ggplot(SECCHI_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("A) Water clarity", ' (n=', nrow(SECCHI_temporal_data1), ')')) +
+  labs(x="Years of data",y="Proportion of data") + theme(legend.position="none") + 
+  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  panel.background = element_blank(), axis.line = element_line(colour = "black"),
+  plot.title=element_text(size=6),
+  axis.text.x=element_text(size=6),
+  axis.text.y=element_text(size=6),
+  axis.title.x=element_text(size=6),
+  axis.title.y=element_text(size=6))
 
-TP_temporal_plot <- ggplot(TP_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Phosphorus") +
-  labs(x="",y="") + theme(legend.position="none") + 
-  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                                                                                    panel.background = element_blank(), axis.line = element_line(colour = "black"))
+TP_temporal_plot <- ggplot(TP_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("B) Phosphorus", ' (n=', nrow(TP_temporal_data1), ')')) +
+  labs(x="Years of data",y="Proportion of data") + theme(legend.position="none") + 
+  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  panel.background = element_blank(), axis.line = element_line(colour = "black"),
+  plot.title=element_text(size=6),
+  axis.text.x=element_text(size=6),
+  axis.text.y=element_text(size=6),
+  axis.title.x=element_text(size=6),
+  axis.title.y=element_text(size=6))
 
-CHLA_temporal_plot <- ggplot(CHLA_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Algae biomass") +
-  labs(x="",y="") + theme(legend.position= c(0.72, 0.18)) + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) +
-  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(1,1,1,1))) + theme(legend.text=element_text(size=7)) +
-  theme(legend.key.size = unit(0.5,"line")) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                                                                                           panel.background = element_blank(), axis.line = element_line(colour = "black"))
+TN_temporal_plot <- ggplot(TN_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("C) Nitrogen", ' (n=', nrow(TN_temporal_data1), ')')) +
+  labs(x="Years of data",y="Proportion of data") + theme(legend.position="none") + 
+  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  panel.background = element_blank(), axis.line = element_line(colour = "black"),
+  plot.title=element_text(size=6),
+  axis.text.x=element_text(size=6),
+  axis.text.y=element_text(size=6),
+  axis.title.x=element_text(size=6),
+  axis.title.y=element_text(size=6))
 
-TN_temporal_plot <- ggplot(TN_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle("Nitrogen") +
-  labs(x="",y="") + theme(legend.position="none") + 
-  theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,-0.3), "cm")) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                                                                                    panel.background = element_blank(), axis.line = element_line(colour = "black"))
-
+CHLA_temporal_plot <- ggplot(CHLA_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("D) Algal biomass", ' (n=', nrow(CHLA_temporal_data1), ')')) +
+  labs(x="Years of data",y="Proportion of data") + theme(legend.position= c(0.72, 0.18)) + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) +
+  theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(1,1,1,1))) + 
+  theme(legend.text=element_text(size=7)) +
+  theme(legend.key.size = unit(0.5,"line")) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        plot.title=element_text(size=6),
+        axis.text.x=element_text(size=6),
+        axis.text.y=element_text(size=6),
+        axis.title.x=element_text(size=6),
+        axis.title.y=element_text(size=6))
 
 multiplot(SECCHI_temporal_plot, TP_temporal_plot, TN_temporal_plot, CHLA_temporal_plot, cols=4)
 ##CairoPDF(file="TemporalPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12)#old
-png(filename='ExportedFigures/Fig2proportionPlot_wTN.png', width=5, height=2, units='in', res=300)
-multiplot(SECCHI_temporal_plot, TP_temporal_plot, TN_temporal_plot, CHLA_temporal_plot, cols=4)
-dev.off()
+#png(filename='ExportedFigures/Fig2proportionPlot_wTN.png', width=6, height=2.5, units='in', res=300)
+#  multiplot(SECCHI_temporal_plot, TP_temporal_plot, TN_temporal_plot, CHLA_temporal_plot, cols=4)
+#dev.off()
 
 #write.csv(SECCHIdata.uniquelakes2, "Secchi_TemporalData_20JUN2018.csv")
 #write.csv(CHLAdata.uniquelakes2, "CHLA_TemporalData_20JUN2018.csv")
