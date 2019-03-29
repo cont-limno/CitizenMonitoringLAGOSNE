@@ -893,11 +893,10 @@ multiplot(allstates_lake_area,
           allstates_resident_dvlp,
           allstates_ag,
           allstates_percent_forest,
-          allstates_percent_wetland,
-          allstates_secchi_bias_plot, cols=2)
-#png(filename='ExportedFigures/Fig4BoxPlots.png', width=4.5, height=4.5, units='in', res=300)
-#multiplot(allstates_lake_area,allstates_resident_dvlp,allstates_ag,allstates_percent_forest,allstates_percent_wetland,allstates_secchi_bias_plot, cols=2)
-#dev.off()
+          allstates_percent_wetland,cols=2)
+png(filename='ExportedFigures/Fig4BoxPlots.png', width=4.5, height=4.5, units='in', res=300)
+multiplot(allstates_lake_area,allstates_resident_dvlp,allstates_ag,allstates_percent_forest,allstates_percent_wetland,cols=2)
+dev.off()
 
 ##########
 # T-test #
