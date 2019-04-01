@@ -300,11 +300,11 @@ SECCHIplot <- ggplot(SECCHI_proportion, aes(x = sampleyear, fill = category)) + 
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
   panel.background = element_blank(), axis.line = element_line(colour = "black"),
-  plot.title=element_text(size=6),
-  axis.text.x=element_text(size=6),
-  axis.text.y=element_text(size=6),
-  axis.title.x=element_text(size=6),
-  axis.title.y=element_text(size=6))
+  plot.title=element_text(size=6, color='black'),
+  axis.text.x=element_text(size=6, color='black'),
+  axis.text.y=element_text(size=6, color='black'),
+  axis.title.x=element_text(size=6, color='black'),
+  axis.title.y=element_text(size=6, color='black'))
 
 ############### Total Phosphorous ##################
 
@@ -316,11 +316,11 @@ TPplot <- ggplot(TP_proportion, aes(x = sampleyear, fill = category)) + geom_bar
   theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"),
-        plot.title=element_text(size=6),
-        axis.text.x=element_text(size=6),
-        axis.text.y=element_text(size=6),
-        axis.title.x=element_text(size=6),
-        axis.title.y=element_text(size=6))
+        plot.title=element_text(size=6, color='black'),
+        axis.text.x=element_text(size=6, color='black'),
+        axis.text.y=element_text(size=6, color='black'),
+        axis.title.x=element_text(size=6, color='black'),
+        axis.title.y=element_text(size=6, color='black'))
 ######################## TN ########################
 TN_proportion <- TN_SOI
 
@@ -329,11 +329,11 @@ TNplot <- ggplot(TN_proportion, aes(x = sampleyear, fill = category)) + geom_bar
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
   panel.background = element_blank(), axis.line = element_line(colour = "black"),
-  plot.title=element_text(size=6),
-  axis.text.x=element_text(size=6),
-  axis.text.y=element_text(size=6),
-  axis.title.x=element_text(size=6),
-  axis.title.y=element_text(size=6))
+  plot.title=element_text(size=6, color='black'),
+  axis.text.x=element_text(size=6, color='black'),
+  axis.text.y=element_text(size=6, color='black'),
+  axis.title.x=element_text(size=6, color='black'),
+  axis.title.y=element_text(size=6, color='black'))
 
 
 ##################Chlorophyll######################
@@ -346,11 +346,11 @@ CHLAplot <- ggplot(CHLA_proportion, aes(x = sampleyear, fill = category)) + geom
   theme(legend.key.size = unit(0.5,"line")) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
   panel.background = element_blank(), axis.line = element_line(colour = "black"),
-  plot.title=element_text(size=6),
-  axis.text.x=element_text(size=6),
-  axis.text.y=element_text(size=6),
-  axis.title.x=element_text(size=6),
-  axis.title.y=element_text(size=6))
+  plot.title=element_text(size=6, color='black'),
+  axis.text.x=element_text(size=6, color='black'),
+  axis.text.y=element_text(size=6, color='black'),
+  axis.title.x=element_text(size=6, color='black'),
+  axis.title.y=element_text(size=6, color='black'))
 
 ########## Multiplot ##########
 
@@ -393,7 +393,7 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 multiplot(SECCHIplot, TPplot, TNplot, CHLAplot, cols=4)
 
 ##CairoPDF(file="proportionPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12) #old
-#png(filename='ExportedFigures/Fig1proportionPlot_wTN.png', width=6, height=2.5, units='in', res=300)
+#jpeg(filename='ExportedFigures/Fig1proportionPlot_wTN.jpeg', width=6, height=2.5, units='in', res=600)
 #  multiplot(SECCHIplot, TPplot, TNplot, CHLAplot, cols=4)
 #dev.off()
 
@@ -631,33 +631,33 @@ SECCHI_temporal_plot <- ggplot(SECCHI_temporal_data1, aes(x = yeargroup, fill = 
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
   panel.background = element_blank(), axis.line = element_line(colour = "black"),
-  plot.title=element_text(size=6),
-  axis.text.x=element_text(size=6),
-  axis.text.y=element_text(size=6),
-  axis.title.x=element_text(size=6),
-  axis.title.y=element_text(size=6))
+  plot.title=element_text(size=6, color='black'),
+  axis.text.x=element_text(size=6, color='black'),
+  axis.text.y=element_text(size=6, color='black'),
+  axis.title.x=element_text(size=6, color='black'),
+  axis.title.y=element_text(size=6, color='black'))
 
 TP_temporal_plot <- ggplot(TP_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("B) Phosphorus", ' (n=', nrow(TP_temporal_data1), ')')) +
   labs(x="Years of data",y="Proportion of data") + theme(legend.position="none") + 
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
   panel.background = element_blank(), axis.line = element_line(colour = "black"),
-  plot.title=element_text(size=6),
-  axis.text.x=element_text(size=6),
-  axis.text.y=element_text(size=6),
-  axis.title.x=element_text(size=6),
-  axis.title.y=element_text(size=6))
+  plot.title=element_text(size=6, color='black'),
+  axis.text.x=element_text(size=6, color='black'),
+  axis.text.y=element_text(size=6, color='black'),
+  axis.title.x=element_text(size=6, color='black'),
+  axis.title.y=element_text(size=6, color='black'))
 
 TN_temporal_plot <- ggplot(TN_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("C) Nitrogen", ' (n=', nrow(TN_temporal_data1), ')')) +
   labs(x="Years of data",y="Proportion of data") + theme(legend.position="none") + 
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
   panel.background = element_blank(), axis.line = element_line(colour = "black"),
-  plot.title=element_text(size=6),
-  axis.text.x=element_text(size=6),
-  axis.text.y=element_text(size=6),
-  axis.title.x=element_text(size=6),
-  axis.title.y=element_text(size=6))
+  plot.title=element_text(size=6, color='black'),
+  axis.text.x=element_text(size=6, color='black'),
+  axis.text.y=element_text(size=6, color='black'),
+  axis.title.x=element_text(size=6, color='black'),
+  axis.title.y=element_text(size=6, color='black'))
 
 CHLA_temporal_plot <- ggplot(CHLA_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("D) Algal biomass", ' (n=', nrow(CHLA_temporal_data1), ')')) +
   labs(x="Years of data",y="Proportion of data") + theme(legend.position= c(0.72, 0.18)) + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) +
@@ -666,17 +666,17 @@ CHLA_temporal_plot <- ggplot(CHLA_temporal_data1, aes(x = yeargroup, fill = cate
   theme(legend.key.size = unit(0.5,"line")) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"),
-        plot.title=element_text(size=6),
-        axis.text.x=element_text(size=6),
-        axis.text.y=element_text(size=6),
-        axis.title.x=element_text(size=6),
-        axis.title.y=element_text(size=6))
+        plot.title=element_text(size=6, color='black'),
+        axis.text.x=element_text(size=6, color='black'),
+        axis.text.y=element_text(size=6, color='black'),
+        axis.title.x=element_text(size=6, color='black'),
+        axis.title.y=element_text(size=6, color='black'))
 
 multiplot(SECCHI_temporal_plot, TP_temporal_plot, TN_temporal_plot, CHLA_temporal_plot, cols=4)
 ##CairoPDF(file="TemporalPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12)#old
-#png(filename='ExportedFigures/Fig2proportionPlot_wTN.png', width=6, height=2.5, units='in', res=300)
-#  multiplot(SECCHI_temporal_plot, TP_temporal_plot, TN_temporal_plot, CHLA_temporal_plot, cols=4)
-#dev.off()
+jpeg(filename='ExportedFigures/Fig2proportionPlot_wTN.jpeg', width=6, height=2.5, units='in', res=600)
+  multiplot(SECCHI_temporal_plot, TP_temporal_plot, TN_temporal_plot, CHLA_temporal_plot, cols=4)
+dev.off()
 
 #write.csv(SECCHIdata.uniquelakes2, "Secchi_TemporalData_20JUN2018.csv")
 #write.csv(CHLAdata.uniquelakes2, "CHLA_TemporalData_20JUN2018.csv")
@@ -817,7 +817,8 @@ allstates_lake_area <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = log(
   scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))+
   theme(plot.margin = unit(c(0.1,0.1,-0.2,0.1), "cm")) +
   scale_x_discrete(labels=box_labels) + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"),
+                                             axis.text.x = element_text(color='black'), axis.text.y=element_text(color='black'))
 
 # RESIDENTIAL DEVELOPMENT
 allstates_resident_dvlp <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = resident_dvlp)) + 
@@ -830,7 +831,8 @@ allstates_resident_dvlp <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = 
   scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))+
   theme(plot.margin = unit(c(0.1,0.1,-0.2,0.1), "cm")) +
   scale_x_discrete(labels=box_labels)+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"),
+                                             axis.text.x = element_text(color='black'), axis.text.y=element_text(color='black'))
 
 # AGRICULTURE
 allstates_ag <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = total_ag_2006_pct)) + 
@@ -844,7 +846,8 @@ allstates_ag <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = total_ag_20
   scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))+
   theme(plot.margin = unit(c(0.1,0.1,-0.2,0.1), "cm")) +
   scale_x_discrete(labels=box_labels)+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"),
+                                             axis.text.x = element_text(color='black'), axis.text.y=element_text(color='black'))
 
 # PERCENT FOREST
 allstates_percent_forest <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = total_forest_2006_pct)) + 
@@ -858,7 +861,8 @@ allstates_percent_forest <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y =
   scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))+
   theme(plot.margin = unit(c(0.1,0.1,-0.2,0.1), "cm")) +
   scale_x_discrete(labels=box_labels)+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"),
+                                             axis.text.x = element_text(color='black'), axis.text.y=element_text(color='black'))
 
 # PERCENT WETLAND
 allstates_percent_wetland <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = all_wetland_dissolved_pct)) + 
@@ -872,7 +876,8 @@ allstates_percent_wetland <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y 
   scale_fill_manual(values=c(color_vector[1], color_vector[2], color_vector[3]))+
   theme(plot.margin = unit(c(0.1,0.1,-0.2,0.1), "cm")) +
   scale_x_discrete(labels=box_labels)+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"),
+                                             axis.text.x = element_text(color='black'), axis.text.y=element_text(color='black'))
 
 # SECCHI BIAS
 allstates_secchi_bias_plot <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = secchi.avg)) + 
@@ -886,7 +891,8 @@ allstates_secchi_bias_plot <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y
   scale_fill_manual(values=c(color_vector[2], color_vector[3]))+
   theme(plot.margin = unit(c(0.1,0.1,-0.2,0.1), "cm")) +
   scale_x_discrete(labels=box_labels)+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"),
+                                             axis.text.x = element_text(color='black'), axis.text.y=element_text(color='black'))
 
 #CairoPDF(file="BoxPlot.pdf", width=11, height=8.5, family="Helvetica", pointsize=12)
 multiplot(allstates_lake_area,
@@ -894,8 +900,8 @@ multiplot(allstates_lake_area,
           allstates_ag,
           allstates_percent_forest,
           allstates_percent_wetland,cols=2)
-png(filename='ExportedFigures/Fig4BoxPlots.png', width=4.5, height=4.5, units='in', res=300)
-multiplot(allstates_lake_area,allstates_resident_dvlp,allstates_ag,allstates_percent_forest,allstates_percent_wetland,cols=2)
+jpeg(filename='ExportedFigures/Fig4BoxPlots.jpeg', width=4.5, height=4.5, units='in', res=600)
+  multiplot(allstates_lake_area,allstates_resident_dvlp,allstates_ag,allstates_percent_forest,allstates_percent_wetland,cols=2)
 dev.off()
 
 ##########
