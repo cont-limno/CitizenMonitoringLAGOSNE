@@ -295,7 +295,7 @@ TNdata.lakeDUPS <- TNdata.uniquelakes[!duplicated(TNdata.uniquelakes[c("lagoslak
 
 SECCHI_proportion <- SECCHI_SOI
 
-SECCHIplot <- ggplot(SECCHI_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width=2) + ggtitle(paste0("A) Water clarity",' \n (n=', nrow(SECCHI_SOI), ')')) +
+SECCHIplot <- ggplot(SECCHI_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width=2) + ggtitle(paste0("a) Water clarity",' \n (n=', nrow(SECCHI_SOI), ')')) +
   labs(x="Year",y="Proportion of data") + scale_fill_discrete(name = "Program type") + theme(legend.position="none") +
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -310,7 +310,7 @@ SECCHIplot <- ggplot(SECCHI_proportion, aes(x = sampleyear, fill = category)) + 
 
 TP_proportion <- TP_SOI
 
-TPplot <- ggplot(TP_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle(paste0("B) Phosphorus", ' \n (n=', nrow(TP_SOI), ')')) +
+TPplot <- ggplot(TP_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle(paste0("b) Phosphorus", ' \n (n=', nrow(TP_SOI), ')')) +
   labs(x="Year",y="Proportion of data") +scale_fill_discrete(name = "Program type") + theme(legend.position="none") +
   theme(text = element_text(size=8)) + 
   theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
@@ -324,7 +324,7 @@ TPplot <- ggplot(TP_proportion, aes(x = sampleyear, fill = category)) + geom_bar
 ######################## TN ########################
 TN_proportion <- TN_SOI
 
-TNplot <- ggplot(TN_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle(paste0("C) Nitrogen", ' \n (n=', nrow(TN_SOI), ')')) +
+TNplot <- ggplot(TN_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle(paste0("c) Nitrogen", ' \n (n=', nrow(TN_SOI), ')')) +
   labs(x="Year",y="Proportion of data") +scale_fill_discrete(name = "Program type") + theme(legend.position="none") +
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -339,7 +339,7 @@ TNplot <- ggplot(TN_proportion, aes(x = sampleyear, fill = category)) + geom_bar
 ##################Chlorophyll######################
 CHLA_proportion <- CHLA_SOI
 
-CHLAplot <- ggplot(CHLA_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle(paste0("D) Algal biomass", ' \n (n=', nrow(CHLA_SOI), ')')) +
+CHLAplot <- ggplot(CHLA_proportion, aes(x = sampleyear, fill = category)) + geom_bar(position = "fill", width = 2) + ggtitle(paste0("d) Algal biomass", ' \n (n=', nrow(CHLA_SOI), ')')) +
   labs(x="Year",y="Proportion of data") + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) + theme(legend.position= c(0.72, 0.18)) +
   theme(text = element_text(size=8)) + theme(legend.title=element_blank(), 
   legend.margin=margin(c(1,1,1,1))) + theme(legend.text=element_text(size=7)) +
@@ -626,7 +626,7 @@ SECCHIdata.uniquelakes2 <- SECCHI_temporal_data1[!duplicated(SECCHI_temporal_dat
 SECCHIdata.lakeDUPS2 <- SECCHIdata.uniquelakes2[!duplicated(SECCHIdata.uniquelakes2[c("lagoslakeid")] ), ]
 
 ############### Q2 PLOT ###################
-SECCHI_temporal_plot <- ggplot(SECCHI_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("A) Water clarity", ' \n (n=', nrow(SECCHI_temporal_data1), ')')) +
+SECCHI_temporal_plot <- ggplot(SECCHI_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("a) Water clarity", ' \n (n=', nrow(SECCHI_temporal_data1), ')')) +
   labs(x="Years of data",y="Proportion of data") + theme(legend.position="none") + 
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -637,7 +637,7 @@ SECCHI_temporal_plot <- ggplot(SECCHI_temporal_data1, aes(x = yeargroup, fill = 
   axis.title.x=element_text(size=8, color='black'),
   axis.title.y=element_text(size=8, color='black'))
 
-TP_temporal_plot <- ggplot(TP_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("B) Phosphorus", ' \n (n=', nrow(TP_temporal_data1), ')')) +
+TP_temporal_plot <- ggplot(TP_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("b) Phosphorus", ' \n (n=', nrow(TP_temporal_data1), ')')) +
   labs(x="Years of data",y="Proportion of data") + theme(legend.position="none") + 
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -648,7 +648,7 @@ TP_temporal_plot <- ggplot(TP_temporal_data1, aes(x = yeargroup, fill = category
   axis.title.x=element_text(size=8, color='black'),
   axis.title.y=element_text(size=8, color='black'))
 
-TN_temporal_plot <- ggplot(TN_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("C) Nitrogen", '\n (n=', nrow(TN_temporal_data1), ')')) +
+TN_temporal_plot <- ggplot(TN_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("c) Nitrogen", '\n (n=', nrow(TN_temporal_data1), ')')) +
   labs(x="Years of data",y="Proportion of data") + theme(legend.position="none") + 
   theme(text = element_text(size=8)) + theme(plot.margin = unit(c(0.1,0.1,0.1,0.1), "cm")) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -659,7 +659,7 @@ TN_temporal_plot <- ggplot(TN_temporal_data1, aes(x = yeargroup, fill = category
   axis.title.x=element_text(size=8, color='black'),
   axis.title.y=element_text(size=8, color='black'))
 
-CHLA_temporal_plot <- ggplot(CHLA_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("D) Algal biomass", ' \n (n=', nrow(CHLA_temporal_data1), ')')) +
+CHLA_temporal_plot <- ggplot(CHLA_temporal_data1, aes(x = yeargroup, fill = category)) + geom_bar(position = "fill") + ggtitle(paste0("d) Algal biomass", ' \n (n=', nrow(CHLA_temporal_data1), ')')) +
   labs(x="Years of data",y="Proportion of data") + theme(legend.position= c(0.72, 0.18)) + scale_fill_discrete(name = "Program type", labels=c('Citizen','Non')) +
   theme(text = element_text(size=8)) + theme(legend.title=element_blank(), legend.margin=margin(c(1,1,1,1))) + 
   theme(legend.text=element_text(size=7)) +
@@ -674,9 +674,9 @@ CHLA_temporal_plot <- ggplot(CHLA_temporal_data1, aes(x = yeargroup, fill = cate
 
 multiplot(SECCHI_temporal_plot, TP_temporal_plot, TN_temporal_plot, CHLA_temporal_plot, cols=4)
 ##CairoPDF(file="TemporalPlot.pdf", width=11, height=5, family="Helvetica", pointsize=12)#old
-#jpeg(filename='ExportedFigures/Fig3proportionPlot_wTN.jpeg', width=6, height=2.5, units='in', res=600)
-#  multiplot(SECCHI_temporal_plot, TP_temporal_plot, TN_temporal_plot, CHLA_temporal_plot, cols=4)
-#dev.off()
+jpeg(filename='ExportedFigures/Fig3proportionPlot_wTN.jpeg', width=6, height=2.5, units='in', res=600)
+  multiplot(SECCHI_temporal_plot, TP_temporal_plot, TN_temporal_plot, CHLA_temporal_plot, cols=4)
+dev.off()
 
 #write.csv(SECCHIdata.uniquelakes2, "Secchi_TemporalData_20JUN2018.csv")
 #write.csv(CHLAdata.uniquelakes2, "CHLA_TemporalData_20JUN2018.csv")
@@ -808,7 +808,7 @@ box_labels <- c('All lakes','Citizen','Non')
 # LAKE SIZE (log transformed)
 allstates_lake_area <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = log(lakearea_ha))) + 
   geom_boxplot(aes(fill=category, group=category)) + 
-  ggtitle("(a) Lake size") +
+  ggtitle("a) Lake size") +
   labs(x = "", y = "log (Lake area (ha))") +
   scale_y_continuous(limits = c(0, 12)) +
   labs(fill = "Sampling Group") + 
@@ -828,7 +828,7 @@ allstates_lake_area <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = log(
 # RESIDENTIAL DEVELOPMENT
 allstates_resident_dvlp <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = resident_dvlp)) + 
   geom_boxplot(aes(fill=category, group=category)) + 
-  ggtitle("(c) Residential development") + 
+  ggtitle("c) Residential development") + 
   labs(x = "", y = "Residential development (%)") + 
   scale_y_continuous(limits = c(0, 50)) + 
   theme(legend.position="none")+ 
@@ -846,7 +846,7 @@ allstates_resident_dvlp <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = 
 # AGRICULTURE
 allstates_ag <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = total_ag_2006_pct)) + 
   geom_boxplot(aes(fill=category, group=category)) + 
-  ggtitle("(e) Agriculture") + 
+  ggtitle("e) Agriculture") + 
   labs(x = "", y = "Agriculture (%)") + 
   scale_y_continuous(limits = c(0, 100)) +
   labs(fill = "Sampling Group") + 
@@ -865,7 +865,7 @@ allstates_ag <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = total_ag_20
 # PERCENT FOREST
 allstates_percent_forest <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = total_forest_2006_pct)) + 
   geom_boxplot(aes(fill=category, group=category)) + 
-  ggtitle("(b) Forest") + 
+  ggtitle("b) Forest") + 
   labs(x = "", y = "Forest (%)") + 
   labs(fill = "Sampling Group") +
   scale_y_continuous(limits = c(0, 100))+ 
@@ -884,7 +884,7 @@ allstates_percent_forest <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y =
 # PERCENT WETLAND
 allstates_percent_wetland <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = all_wetland_dissolved_pct)) + 
   geom_boxplot(aes(fill=category, group=category)) + 
-  ggtitle("(d) Wetland") + 
+  ggtitle("d) Wetland") + 
   labs(x = "", y = "Wetland (%)") + 
   labs(fill = "Sampling Group") +
   scale_y_continuous(limits = c(0, 25))+ 
@@ -903,7 +903,7 @@ allstates_percent_wetland <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y 
 # SECCHI BIAS
 allstates_secchi_bias_plot <- ggplot(bind_sampled_SOI_lakes, aes(x = category, y = secchi.avg)) + 
   geom_boxplot(aes(fill=category, group=category)) + 
-  ggtitle("(f) Lake clarity") + 
+  ggtitle("f) Lake clarity") + 
   labs(x = "", y = "Secchi depth (m)") + 
   labs(fill = "Sampling Group") + 
   scale_y_continuous(limits = c(0, 7))+
